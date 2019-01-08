@@ -48,7 +48,7 @@ les mitranscriptome.gtf/mitranscriptome.v2.gtf | awk '$3~/transcript/' | awk '{p
 
 ##################################################################################
 
-## Get bed file for lncRNAs transcripts
+## Get bed file for lncRNA transcripts
 
 ### GENCODE
 ```
@@ -69,7 +69,7 @@ less mitranscriptome.gtf/mitranscriptome.v2.hg38.gtf | awk '$3=="transcript" && 
 
 ##################################################################################
 
-## Get fasta for lncRNAs transcripts
+## Get fasta sequences for lncRNA transcripts
 
 ### GENCODE
 ```
@@ -148,6 +148,7 @@ The number indicates the number of genes (all genes included) in each source
 
 
 **Identical lncRNA transcripts between two sources**
+
 |      | GENCODE  |      NONCDOE      |  MiTranscriptome |
 |:----------:|:----------:|:-------------:|:------:|
 | GENCODE |  23,800 | 17,306 | 13 |
@@ -158,6 +159,7 @@ The number indicates the number of identical lncRNA transcripts bewteen two sour
 
 
 **Overlapping bases of lncRNA transcripts between two sources**
+
 |      | GENCODE  |      NONCDOE      |  MiTranscriptome |
 |:----------:|:----------:|:-------------:|:------:|
 | GENCODE |  331 | 325 | 268 |
