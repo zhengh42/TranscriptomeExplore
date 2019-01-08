@@ -1,11 +1,13 @@
 ######################################################
 
 ## Tools and scripts
-
+```
 liftOver=/srv/gevaertlab/tools/UCSCtools/liftOver
-hg19ToHg38overchain=/srv/gevaertlab/tools/UCSCtools/hg19ToHg38.over.chain
-mergeBed and intersectBed are from bedtools 
-Extract.pl: in-house script. Refer to zhengh42/LittlestScripts
+hg19ToHg38overchain=/srv/gevaertlab/tools/UCSCtools/hg19ToHg38.over.chain  
+```
+
+- mergeBed and intersectBed are commands from bedtools. 
+- Extract.pl: in-house script. Refer to zhengh42/LittlestScripts
 
 ######################################################
 
@@ -34,11 +36,21 @@ gzip -d mitranscriptome.gtf/mitranscriptome.v2.gtf.gz
 
 ## Stats
 
-### GENCODE
-
 ```
 less gencode.v27.annotation.gtf | grep -v ^# | awk '$3~/transcript/' | cut -f9 | awk 'OFS="\t"{print $2,$4,$6,$12}' | sed 's/[";]//g' | awk 'OFS="\t"{$5="other";$6="other";if($4~/non_coding|3prime_overlapping_ncRNA|antisense|bidirectional_promoter_lncRNA|lincRNA|macro_lncRNA|sense_intronic|sense_overlapping/)$6="lncRNA";if($4~/protein_coding/)$6="proteincoding";if($3~/protein_coding/)$5="proteincoding";if($3~/non_coding|3prime_overlapping_ncRNA|antisense|bidirectional_promoter_lncRNA|lincRNA|macro_lncRNA|sense_intronic|sense_overlapping/)$5="lncRNA";  print $0}'| sed '1i gene_id\ttranscript\tgenetype1\ttranscripttype1\tgenetype\ttranscripttype' > gencode.v27.gene_transcript_type
+less gencode.v27.gene_transcript_type | cut -f1,5 | sed 1d | sort | uniq | cut -f2 | sort  | uniq -c # gene type in GENCODE
+less NONCODEv5_human_hg38_lncRNA.gtf | awk '{print $10}' | sort | uniq | wc -l # gene type in NONCODE
+les mitranscriptome.gtf/mitranscriptome.v2.gtf | awk '$3~/transcript/' | awk '{print $10,$12}' | sort | uniq | awk '{print $1}' | sort | uniq -c # gene type in MiTranscriptome
 ```
+
+**Composition of each transcriptome source**
+
+|      | GENCODE  |      NONCDOE      |  MiTranscriptome |
+|:----------:|:----------:|:-------------:|:------:|
+| Protein-coding |  19,836 | - | 19,922 |
+| lncRNA |  14,168 | 96,308 | 63,615 |
+| Other |  24,284 | - | 15,445 |
+
 
 ######################################################
 
@@ -85,9 +97,8 @@ intersectBed -a NONCODEv5_human_hg38.lncRNA.bed -b mitranscriptome.v2.hg38.lncRN
 
 |      | GENCODE  |      NONCDOE      |  MiTranscriptome |
 |:----------:|:----------:|:-------------:|:------:|
-| GENCODE |  331 | 325[^1] | 268 |
+| GENCODE |  331 | 325 | 268 |
 | NONCDOE |       |   1028 |  641|
 | MiTranscriptome |  | | 1201|
 
-[^1]The number indicates the total length (Mb) of overlapping lncRNA transcripts bewteen two sources.
-
+*The number indicates the total length (Mb) of overlapping lncRNA transcripts bewteen two source.*
